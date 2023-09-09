@@ -60,9 +60,12 @@ return require('packer').startup(function(use)
     use {'tpope/vim-fugitive'}
     use {'tpope/vim-rhubarb'}
 
-
+    use {
+        'nvim-lualine/lualine.nvim',
+        --requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
     -- Airline Bar
-	use 'vim-airline/vim-airline'
-	use 'vim-airline/vim-airline-themes'
+    --	use 'vim-airline/vim-airline'
+    --	use 'vim-airline/vim-airline-themes'
 
 end)
