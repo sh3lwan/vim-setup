@@ -28,6 +28,8 @@ map("n", "<leader>tt", "<CMD>ToggleTerm size=10<CR>")
 map("n", "<leader>th", "<CMD>ToggleTerm size=10 direction=horizontal<CR>")
 map("n", "<leader>tv", "<CMD>ToggleTerm size=80 direction=vertical<CR>")
 
+map("v", "J", ":m '>+1<CR>gv=gv")
+map("v", "K", ":m '<-2<CR>gv=gv")
 
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+map("n", "<leader>pv", vim.cmd.Ex)
 vim.api.nvim_set_keymap('n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
