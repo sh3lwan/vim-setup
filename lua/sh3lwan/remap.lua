@@ -9,6 +9,7 @@ end
 -- Telescope
 local status, telescope = pcall(require, "telescope.builtin")
 if status then
+
     map("n", "<leader>ff", telescope.find_files)
     map("n", "<leader>fg", telescope.live_grep)
     map("n", "<leader>fb", telescope.buffers)
@@ -39,4 +40,3 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 map("n", "<leader>pv", vim.cmd.Ex)
---vim.api.nvim_set_keymap('n', '<C-]>', '<Cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
