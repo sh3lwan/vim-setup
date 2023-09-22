@@ -9,7 +9,6 @@ end
 -- Telescope
 local status, telescope = pcall(require, "telescope.builtin")
 if status then
-
     map("n", "<leader>ff", telescope.find_files)
     map("n", "<leader>fg", telescope.live_grep)
     map("n", "<leader>fb", telescope.buffers)
