@@ -15,6 +15,13 @@ if status then
     map("n", "<leader>fh", telescope.help_tags)
     map("n", "<leader>fs", telescope.git_status)
     map("n", "<leader>fc", telescope.git_commits)
+    vim.api.nvim_set_keymap('n', '<leader>FG',
+        [[:lua vim.cmd("Telescope live_grep default_text=" .. vim.fn.expand("<cword>"))<CR>]],
+        { noremap = true, silent = true })
+
+    vim.api.nvim_set_keymap('n', '<leader>FF',
+        [[:lua vim.cmd("Telescope find_files default_text=" .. vim.fn.expand("<cword>"), {insert = false})<CR>]],
+        { noremap = true, silent = true })
 else
     print("Telescope not found")
 end
