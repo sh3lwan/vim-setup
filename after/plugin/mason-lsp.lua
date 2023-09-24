@@ -17,5 +17,6 @@ masonlsp.setup({
         "jsonls",
         "tsserver",
         "tailwindcss",
+        "rust_analyzer",
     },
 })

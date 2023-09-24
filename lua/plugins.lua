@@ -10,62 +10,71 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 return require('packer').startup(function(use)
-	-- Packer can manage itself
-	use 'wbthomason/packer.nvim'
+    -- Packer can manage itself
+    use 'wbthomason/packer.nvim'
 
-	use {
-		'nvim-telescope/telescope.nvim',
-		tag = '0.1.2',
-		requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
-	}
+    use {
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.2',
+        requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
+    }
 
-    use ({
+    use({
         'rose-pine/neovim',
         as = 'rose-pine',
-        config= function()
+        config = function()
             vim.cmd("colorscheme rose-pine")
         end
     })
 
-	--use ({
-	--	'catppuccin/nvim',
-	--	as = "catppuccin",
-
-	--})
-
-    use ('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate'})
+    use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
 
     use {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v2.x',
         requires = {
             -- LSP Support
-            {'neovim/nvim-lspconfig'},             -- Required
-            {'williamboman/mason.nvim'},           -- Optional
-            {'williamboman/mason-lspconfig.nvim'}, -- Optional
+            { 'neovim/nvim-lspconfig' },             -- Required
+            { 'williamboman/mason.nvim' },           -- Optional
+            { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
             -- Autocompletion
-            {'hrsh7th/nvim-cmp'},     -- Required
-            {'hrsh7th/cmp-nvim-lsp'}, -- Required
-            {'L3MON4D3/LuaSnip'},     -- Required
+            { 'hrsh7th/nvim-cmp' },     -- Required
+            { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+            { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
 
     -- Terminal
-    use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+    use { "akinsho/toggleterm.nvim", tag = '*', config = function()
         require("toggleterm").setup()
-    end}
+    end }
 
     -- Git related plugins
-    use {'tpope/vim-fugitive'}
-    use {'tpope/vim-rhubarb'}
+    use { 'tpope/vim-fugitive' }
+    use { 'tpope/vim-rhubarb' }
 
     use {
         'nvim-lualine/lualine.nvim',
-        --requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+
+    use {
+        "windwp/nvim-autopairs",
+        opts = {
+            fast_wrap = {},
+            disable_filetype = { "TelescopePrompt", "vim" },
+        },
+        config = function(_, opts)
+            require("nvim-autopairs").setup(opts)
+
+            -- setup cmp for autopairs
+            local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+            require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+    }
+
     -- Airline Bar
     --	use 'vim-airline/vim-airline'
     --	use 'vim-airline/vim-airline-themes'
-
 end)

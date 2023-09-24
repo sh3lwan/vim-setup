@@ -8,13 +8,15 @@ require('telescope').setup {
     },
     pickers = {
         find_files = {
+            initial_mode = "normal",
             hidden = true,
         },
         buffers = {
+            initial_mode = "normal",
             show_all_buffers = true,
             sort_lastused = true,
             theme = "dropdown",
-            previewer = false,
+            previewer = true,
             mappings = {
                 n = {
                     ["d"] = "delete_buffer",
