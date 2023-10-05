@@ -48,7 +48,11 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
     vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
-    vim.keymap.set("n", "<leader><leader>", function() vim.lsp.buf.format() end, opts)
+
+    vim.keymap.set("n", "<leader><leader>", function()
+        vim.lsp.buf.format()
+    end, opts)
+
     vim.keymap.set("n", '<leader>e', function()
         vim.diagnostic.open_float({ scope = "line" });
     end)
@@ -69,4 +73,11 @@ vim.diagnostic.config({
     signs = true,
     update_in_insert = false,
     underline = true,
+})
+
+-- Format Before Save
+vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function()
+        vim.lsp.buf.format()
+    end,
 })

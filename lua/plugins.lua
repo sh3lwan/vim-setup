@@ -44,6 +44,10 @@ return require('packer').startup(function(use)
             { 'L3MON4D3/LuaSnip' },     -- Required
         }
     }
+    -- Snippet engine
+    use('hrsh7th/vim-vsnip')
+    -- Adds extra functionality over rust analyzer
+    use("simrat39/rust-tools.nvim")
 
     -- Terminal
     use { "akinsho/toggleterm.nvim", tag = '*', config = function()
