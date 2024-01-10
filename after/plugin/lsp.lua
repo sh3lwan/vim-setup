@@ -69,15 +69,15 @@ lsp.setup()
 
 -- Diagnostics Messages Config
 vim.diagnostic.config({
-    virtual_text = false,
+    virtual_text = true, -- Hide or show message on line
     signs = true,
     update_in_insert = false,
     underline = true,
 })
 
 -- Format Before Save
-vim.api.nvim_create_autocmd("BufWritePre", {
-    callback = function()
-        vim.lsp.buf.format()
-    end,
-})
+--vim.api.nvim_create_autocmd("BufWritePre", {
+--    callback = function()
+--        vim.lsp.buf.format()
+--    end,
+--})
