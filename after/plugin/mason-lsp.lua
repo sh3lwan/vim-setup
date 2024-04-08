@@ -18,5 +18,7 @@ masonlsp.setup({
         "tsserver",
         "tailwindcss",
         "rust_analyzer",
+        "templ",
+        "gopls"
     },
 })
