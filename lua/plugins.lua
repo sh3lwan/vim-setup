@@ -39,17 +39,16 @@ return require('packer').startup(function(use)
             { 'hrsh7th/nvim-cmp' },     -- Required
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
             { 'L3MON4D3/LuaSnip' },     -- Required
-
         }
     }
 
     use ({
-
         'hrsh7th/vim-vsnip',
         'hrsh7th/vim-vsnip-integ',
         "saadparwaiz1/cmp_luasnip",
         "rafamadriz/friendly-snippets",
     })
+
     -- Adds extra functionality over rust analyzer
     use("simrat39/rust-tools.nvim")
 
