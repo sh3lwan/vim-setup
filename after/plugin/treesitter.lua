@@ -88,3 +88,9 @@ vim.filetype.add({
         templ = "templ",
     },
 })
+
+-- Format Templ files and auto generate on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*.templ",
+    command = "silent !templ generate <afile>",
+})
