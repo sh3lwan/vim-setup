@@ -1,8 +1,3 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
--- Only required if you have packer configured as `opt`
---vim.cmd.packadd('packer.nvim')
--- Automatically run: PackerCompile
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("PACKER", { clear = true }),
     pattern = "plugins.lua",
@@ -10,7 +5,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 return require('packer').startup(function(use)
-    -- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
     use {
@@ -24,7 +18,12 @@ return require('packer').startup(function(use)
         as = 'rose-pine',
     })
 
-    use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+    --use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+    use({
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        after = "nvim-treesitter",
+        requires = "nvim-treesitter/nvim-treesitter",
+    })
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -42,7 +41,7 @@ return require('packer').startup(function(use)
         }
     }
 
-    use ({
+    use({
         'hrsh7th/vim-vsnip',
         'hrsh7th/vim-vsnip-integ',
         "saadparwaiz1/cmp_luasnip",
@@ -60,14 +59,6 @@ return require('packer').startup(function(use)
     -- Git related plugins
     use { 'tpope/vim-fugitive' }
     use { 'tpope/vim-rhubarb' }
-    --    use({
-    --        "kdheepak/lazygit.nvim",
-    --        -- optional for floating window border decoration
-    --        requires = {
-    --            "nvim-lua/plenary.nvim",
-    --        },
-    --    })
-    --
     use {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
