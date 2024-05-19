@@ -1,12 +1,10 @@
 require("oil").setup({
     default_file_explorer = true,
-    -- Id is automatically added at the beginning, and name at the end
-    -- See :help oil-columns
     columns = {
         "icon",
-        "permissions",
-        "size",
-        "mtime",
+        -- "permissions",
+        -- "size",
+        -- "mtime",
     },
     -- Buffer-local options to use for oil buffers
     buf_options = {

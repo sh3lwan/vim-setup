@@ -4,8 +4,6 @@ local function map(mode, lhs, rhs)
     vim.keymap.set(mode, lhs, rhs, { silent = true })
 end
 
-
-
 -- Telescope
 local status, telescope = pcall(require, "telescope.builtin")
 if status then
@@ -31,11 +29,10 @@ map("n", "<TAB>", "<CMD>bnext<CR>")
 map("n", "<S-TAB>", "<CMD>bprevious<CR>")
 
 -- Terminal
-map("n", "<leader>tt", "<CMD>ToggleTerm size=10<CR>")
 map("n", "<leader>th", "<CMD>ToggleTerm size=10 direction=horizontal<CR>")
 map("n", "<leader>tv", "<CMD>ToggleTerm size=80 direction=vertical<CR>")
 
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
-map("n", "<leader>pv", vim.cmd.Ex)
+map("n", "<leader>pv", "<CMD>Oil<CR>")

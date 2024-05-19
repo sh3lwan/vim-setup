@@ -7,18 +7,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
+    -- Fuzzy Finding
     use {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.2',
         requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
     }
 
-    use({
-        'rose-pine/neovim',
-        as = 'rose-pine',
-    })
+    -- Color Scehem
+    use { "catppuccin/nvim", as = "catppuccin" }
 
-    --use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use({
         "nvim-treesitter/nvim-treesitter-textobjects",
         after = "nvim-treesitter",
@@ -43,11 +41,17 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'hrsh7th/vim-vsnip',
-        'hrsh7th/vim-vsnip-integ',
-        "saadparwaiz1/cmp_luasnip",
-        "rafamadriz/friendly-snippets",
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-neotest/nvim-nio",
+            "antoinemadec/FixCursorHold.nvim",
+            "nvim-neotest/neotest-go", -- Go Test Suit
+            "olimorris/neotest-phpunit",
+            "V13Axel/neotest-pest",
+        },
     }
+
 
     -- Adds extra functionality over rust analyzer
     use("simrat39/rust-tools.nvim")
@@ -67,8 +71,12 @@ return require('packer').startup(function(use)
 
 
     --Harpoon
-    use('nvim-lua/plenary.nvim')
-    use('ThePrimeagen/harpoon')
+    use {
+        'ThePrimeagen/harpoon',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        }
+    }
 
     use {
         "windwp/nvim-autopairs",
@@ -84,6 +92,25 @@ return require('packer').startup(function(use)
             require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
         end,
     }
+
+    use {
+        "stevearc/oil.nvim",
+        opts = {},
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("oil").setup({
+                default_file_explorer = true,
+            })
+        end,
+    }
+
+    -- Disabled Because it created errors - Used for html cmp
+    -- use {
+    --     'hrsh7th/vim-vsnip',
+    --     'hrsh7th/vim-vsnip-integ',
+    --     "saadparwaiz1/cmp_luasnip",
+    --     "rafamadriz/friendly-snippets",
+    -- }
 
     -- Airline Bar
     --	use 'vim-airline/vim-airline'

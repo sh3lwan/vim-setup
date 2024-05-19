@@ -7,6 +7,18 @@ require('telescope').setup {
             ".templ.go"
         }
     },
+    path_display = {
+        "filename_first",
+    },
+    mappings = {
+        n = {
+            ["d"] = "delete_buffer",
+        },
+        i = {
+            ["<c-d>"] = "delete_buffer",
+        }
+    },
+    sorting_strategy = "ascending",
     pickers = {
         find_files = {
             initial_mode = "insert",
@@ -25,7 +37,7 @@ require('telescope').setup {
                 i = {
                     ["<c-d>"] = "delete_buffer",
                 }
-            }
+            },
         }
     }
 }
