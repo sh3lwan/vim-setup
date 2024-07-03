@@ -14,6 +14,10 @@ return require('packer').startup(function(use)
         requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
     }
 
+    use {
+        'nvim-telescope/telescope-media-files.nvim'
+    }
+
     -- Color Scehem
     use { "catppuccin/nvim", as = "catppuccin" }
 
@@ -39,6 +43,8 @@ return require('packer').startup(function(use)
 
         }
     }
+    -- Linter - For errors and bugs detections
+    use 'mfussenegger/nvim-lint'
 
     use {
         "nvim-neotest/neotest",
@@ -50,6 +56,13 @@ return require('packer').startup(function(use)
             "olimorris/neotest-phpunit",
             "V13Axel/neotest-pest",
         },
+        config = function()
+            require('neotest').setup({
+                adapters = {
+                    require('neotest-pest'),
+                }
+            })
+        end
     }
 
 
@@ -103,6 +116,15 @@ return require('packer').startup(function(use)
             })
         end,
     }
+
+    use {
+        "folke/todo-comments.nvim",
+
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {}
+    }
+
+    -- use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 
     -- Disabled Because it created errors - Used for html cmp
     -- use {

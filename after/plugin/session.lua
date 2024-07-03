@@ -55,10 +55,10 @@ function save_project_session()
     end
 end
 
--- Automatically load the project-specific session on startup
+--Automatically load the project-specific session on startup
 vim.cmd([[
-  autocmd VimEnter * lua load_project_session()
-]])
+   autocmd VimEnter * lua load_project_session()
+ ]])
 
 -- Automatically save the project-specific session when quitting Neovim
 vim.cmd([[

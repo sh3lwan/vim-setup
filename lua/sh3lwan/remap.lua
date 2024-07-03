@@ -36,3 +36,7 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 map("n", "<leader>pv", "<CMD>Oil<CR>")
+
+--map("n", "<C-d>", "<C-d>zz")
+--map("n", "<C-u>", "<C-u>zz")
+--vim.opt.scrolloff = 8 -- or any value larger than 0

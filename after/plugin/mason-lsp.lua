@@ -5,6 +5,9 @@ if not status then
 end
 
 masonlsp.setup({
+    ['pest_ls'] = function ()
+        require('pest-vim').setup {}
+    end,
     automatic_installation = true,
     ensure_installed = {
         "phpactor",

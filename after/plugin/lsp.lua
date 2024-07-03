@@ -57,6 +57,14 @@ lsp.on_attach(function(_, bufnr)
         vim.diagnostic.open_float({ scope = "line" });
     end)
 
+    vim.keymap.set("n", "<leader>hd", function()
+        vim.diagnostic.config({ virtual_text = false })
+    end)
+
+    vim.keymap.set("n", "<leader>sd", function()
+        vim.diagnostic.config({ virtual_text = true })
+    end)
+
     --    vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
     --    vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
     --    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
@@ -71,7 +79,7 @@ lsp.setup()
 
 -- Diagnostics Messages Config
 vim.diagnostic.config({
-    virtual_text = true, -- Hide or show message on line
+    virtual_text = false, -- Hide or show message on line
     signs = true,
     update_in_insert = false,
     underline = true,
