@@ -10,13 +10,11 @@ return require('packer').startup(function(use)
     -- Fuzzy Finding
     use {
         'nvim-telescope/telescope.nvim',
+        'dawsers/telescope-file-history.nvim',
         tag = '0.1.2',
         requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
     }
 
-    use {
-        'nvim-telescope/telescope-media-files.nvim'
-    }
 
     -- Color Scehem
     use { "catppuccin/nvim", as = "catppuccin" }
@@ -52,22 +50,11 @@ return require('packer').startup(function(use)
             "nvim-treesitter/nvim-treesitter",
             "nvim-neotest/nvim-nio",
             "antoinemadec/FixCursorHold.nvim",
-            "nvim-neotest/neotest-go", -- Go Test Suit
+            "nvim-neotest/neotest-go",
             "olimorris/neotest-phpunit",
             "V13Axel/neotest-pest",
         },
-        config = function()
-            require('neotest').setup({
-                adapters = {
-                    require('neotest-pest'),
-                }
-            })
-        end
     }
-
-
-    -- Adds extra functionality over rust analyzer
-    use("simrat39/rust-tools.nvim")
 
     -- Terminal
     use { "akinsho/toggleterm.nvim", tag = '*', config = function()

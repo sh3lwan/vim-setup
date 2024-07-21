@@ -1,12 +1,18 @@
 local function refreshBuffer()
     -- Refresh the current file with :e!
     vim.defer_fn(function()
-        -- Refresh the current file with :e!
-        local status, error = pcall(function() vim.cmd('e!') end)
+        local status, err = pcall(function() vim.cmd('e!') end)
 
-        if error then vim.cmd('Ex') end
+        if not status then
+            -- Get the current working directory
+            local cwd = vim.loop.cwd()
+
+            -- Open Oil to show the directory contents
+            require('oil').open(cwd)
+        end
     end, 50)
 end
+
 -- Function to load a project-specific session
 function load_project_session()
     -- Get the current project directory

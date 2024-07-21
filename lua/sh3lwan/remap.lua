@@ -13,6 +13,7 @@ if status then
     map("n", "<leader>fh", telescope.help_tags)
     map("n", "<leader>fs", telescope.git_status)
     map("n", "<leader>fc", telescope.git_commits)
+    --map("n", "<leader>hh", telescope.file_history)
     vim.api.nvim_set_keymap('n', '<leader>FG',
         [[:lua vim.cmd("Telescope live_grep default_text=" .. vim.fn.expand("<cword>"))<CR>]],
         { noremap = true, silent = true })
