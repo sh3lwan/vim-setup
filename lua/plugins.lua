@@ -10,7 +10,7 @@ return require('packer').startup(function(use)
     -- Fuzzy Finding
     use {
         'nvim-telescope/telescope.nvim',
-        'dawsers/telescope-file-history.nvim',
+        --'dawsers/telescope-file-history.nvim',
         tag = '0.1.2',
         requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' }
     }
@@ -41,6 +41,12 @@ return require('packer').startup(function(use)
 
         }
     }
+
+    -- Show method params names when writing
+    use {
+        "ray-x/lsp_signature.nvim",
+    }
+
     -- Linter - For errors and bugs detections
     use 'mfussenegger/nvim-lint'
 
@@ -111,6 +117,8 @@ return require('packer').startup(function(use)
         opts = {}
     }
 
+
+    use ("lukas-reineke/indent-blankline.nvim")
     -- use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 
     -- Disabled Because it created errors - Used for html cmp

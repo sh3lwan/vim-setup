@@ -3,7 +3,7 @@ local function refreshBuffer()
     vim.defer_fn(function()
         local status, err = pcall(function() vim.cmd('e!') end)
 
-        if not status then
+        if err or not status then
             -- Get the current working directory
             local cwd = vim.loop.cwd()
 
