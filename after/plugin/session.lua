@@ -6,9 +6,13 @@ local function refreshBuffer()
         if err or not status then
             -- Get the current working directory
             local cwd = vim.loop.cwd()
+            if pcall(function()
+                    -- Open Oil to show the directory contents
+                    require('oil').open(cwd)
+                end) then
 
-            -- Open Oil to show the directory contents
-            require('oil').open(cwd)
+                print("All good!")
+            end
         end
     end, 50)
 end
