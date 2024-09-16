@@ -62,7 +62,7 @@ require("catppuccin").setup({
             crust = "#141617",
         },
     },
-    transparent_background = true,
+    transparent_background = false,
     show_end_of_buffer = false,
     integration_default = false,
     integrations = {

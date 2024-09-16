@@ -18,9 +18,7 @@ masonlsp.setup({
         "eslint",
         "html",
         "jsonls",
-        "tsserver",
         "tailwindcss",
-        "rust_analyzer",
         "templ",
         "gopls"
     },

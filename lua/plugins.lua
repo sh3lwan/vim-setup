@@ -72,7 +72,10 @@ return require('packer').startup(function(use)
     use { 'tpope/vim-rhubarb' }
     use {
         'nvim-lualine/lualine.nvim',
-        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+        requires = {
+            'nvim-tree/nvim-web-devicons',
+            "meuter/lualine-so-fancy.nvim",
+        }
     }
 
 
@@ -101,13 +104,19 @@ return require('packer').startup(function(use)
 
     use {
         "stevearc/oil.nvim",
-        opts = {},
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        config = function()
-            require("oil").setup({
-                default_file_explorer = true,
-            })
-        end,
+        requires = { "nvim-tree/nvim-web-devicons" },
+        opts = {}
+    }
+
+
+    use {
+        "nvim-neo-tree/neo-tree.nvim",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "MunifTanjim/nui.nvim",
+
+        }
     }
 
     use {
@@ -118,7 +127,9 @@ return require('packer').startup(function(use)
     }
 
 
-    use ("lukas-reineke/indent-blankline.nvim")
+    --use("lukas-reineke/indent-blankline.nvim")
+
+    --
     -- use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 
     -- Disabled Because it created errors - Used for html cmp
