@@ -104,7 +104,7 @@ require('lualine').setup {
         lualine_y = {
             { "fancy_filetype"}
         },
-        lualine_z = { 'fancy_lsp_servers' }
+        lualine_z = {}
     },
     inactive_sections = {
         lualine_a = {},
