@@ -11,8 +11,3 @@ require('lspconfig').gopls.setup({
         },
     },
 })
-
--- Example configuration for lspconfig
---require('lspconfig').cssls.setup{}
---require('lspconfig').tsserver.setup{}
-

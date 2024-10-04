@@ -11,6 +11,7 @@ masonlsp.setup({
     automatic_installation = true,
     ensure_installed = {
         "phpactor",
+        "intelephense",
         "sqlls",
         "volar",
         "dockerls",
@@ -20,6 +21,6 @@ masonlsp.setup({
         "jsonls",
         "tailwindcss",
         "templ",
-        "gopls"
+        "lua_ls"
     },
 })

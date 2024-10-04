@@ -1,2 +1,2 @@
-require("sh3lwan")
 require("plugins")
+require("sh3lwan")
