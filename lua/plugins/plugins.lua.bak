@@ -142,11 +142,97 @@ return require('packer').startup(function(use)
     use {
         "folke/todo-comments.nvim",
 
-        dependencies = { "nvim-lua/plenary.nvim" },
+        requires = { "nvim-lua/plenary.nvim" },
         opts = {}
     }
 
 
+    use {
+        "adalessa/laravel.nvim",
+        requires = {
+            "nvim-telescope/telescope.nvim",
+            "tpope/vim-dotenv",
+            "MunifTanjim/nui.nvim",
+            "nvimtools/none-ls.nvim",
+        },
+
+        opts = {
+            features = {
+                null_ls = {
+                    enable = true,
+                },
+                route_info = {
+                    enable = true,      --- to enable the laravel.nvim virtual text
+                    position = 'right', --- where to show the info (available options 'right', 'top')
+                    middlewares = true, --- wheather to show the middlewares section in the info
+                    method = true,      --- wheather to show the method section in the info
+                    uri = true          --- wheather to show the uri section in the info
+                },
+            },
+        },
+    }
+
+    use({
+        "yetone/avante.nvim",
+        --event = "VeryLazy", -- Equivalent to lazy loading on certain events
+        --version = false, -- Always pull the latest changes
+        --opts = {},    -- Add any options you want here
+        --build = "make", -- Build command for non-Windows
+        -- For Windows, you could use the following:
+        -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false",
+        requires = {
+            -- Required dependencies
+            { "nvim-treesitter/nvim-treesitter" },
+            { "stevearc/dressing.nvim" },
+            { "nvim-lua/plenary.nvim" },
+            { "MunifTanjim/nui.nvim" },
+            { "nvim-tree/nvim-web-devicons" }, -- Optional
+            { "zbirenbaum/copilot.lua" }, -- Optional, for providers='copilot'
+
+            -- Dependency for image pasting support
+            {
+                "HakonHarnes/img-clip.nvim",
+                --event = "VeryLazy", -- Lazy loading
+                config = function()
+                    require('img-clip').setup({
+                        default = {
+                            embed_image_as_base64 = false,
+                            prompt_for_file_name = false,
+                            drag_and_drop = {
+                                insert_mode = true,
+                            },
+                            use_absolute_path = true, -- Required for Windows users
+                        },
+                    })
+                end,
+            },
+
+            -- Dependency for rendering markdown
+            {
+                'MeanderingProgrammer/render-markdown.nvim',
+                --ft = { "markdown", "Avante" }, -- Lazy load based on file types
+                config = function()
+                    require('render-markdown').setup({
+                        file_types = { "markdown", "Avante" }
+                    })
+                end,
+            },
+        },
+    })
+
+    -- ChatGPT
+    --  use({
+    --      "jackMort/ChatGPT.nvim",
+    --      config = function()
+    --          require("chatgpt").setup()
+    --      end,
+    --      requires = {
+    --          "MunifTanjim/nui.nvim",
+    --          "nvim-lua/plenary.nvim",
+    --          "folke/trouble.nvim",
+    --          "nvim-telescope/telescope.nvim"
+    --      }
+    --  })
     --use("lukas-reineke/indent-blankline.nvim")
 
     --

@@ -21,6 +21,7 @@ masonlsp.setup({
         "jsonls",
         "tailwindcss",
         "templ",
-        "lua_ls"
+        "lua_ls",
+        "gopls"
     },
 })

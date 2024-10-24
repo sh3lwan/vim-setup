@@ -2,12 +2,11 @@ local lsp = require("lsp-zero")
 
 lsp.preset("recommended")
 
-lsp.ensure_installed({
-    'ts_ls',
-    'eslint',
-    'tailwindcss',
-    'rust_analyzer',
-})
+--lsp.ensure_installed({
+--    'ts_ls',
+--    'eslint',
+--    'tailwindcss',
+--})
 
 -- Fix Undefined global 'vim'
 lsp.nvim_workspace()

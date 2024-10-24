@@ -1,2 +1,3 @@
-require("plugins")
-require("sh3lwan")
+require("config.set")
+require("config.lazy")
+require("config.remap")
