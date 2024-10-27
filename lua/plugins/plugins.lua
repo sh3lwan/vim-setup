@@ -57,13 +57,13 @@ return {
     },
 
     -- Terminal
-   -- {
-   --     "akinsho/toggleterm.nvim",
-   --     tag = '*',
-   --     config = function()
-   --         require("toggleterm").setup()
-   --     end
-   -- },
+    -- {
+    --     "akinsho/toggleterm.nvim",
+    --     tag = '*',
+    --     config = function()
+    --         require("toggleterm").setup()
+    --     end
+    -- },
 
     -- Git related plugins
     'tpope/vim-fugitive',
@@ -122,76 +122,80 @@ return {
     },
 
 
-   -- {
-   --     "adalessa/laravel.nvim",
-   --     dependencies = {
-   --         "nvim-telescope/telescope.nvim",
-   --         "tpope/vim-dotenv",
-   --         "MunifTanjim/nui.nvim",
-   --         "nvimtools/none-ls.nvim",
-   --     },
-   --     opts = {
-   --         features = {
-   --             null_ls = {
-   --                 enable = true,
-   --             },
-   --             route_info = {
-   --                 enable = true,      --- to enable the laravel.nvim virtual text
-   --                 position = 'right', --- where to show the info (available options 'right', 'top')
-   --                 middlewares = true, --- wheather to show the middlewares section in the info
-   --                 method = true,      --- wheather to show the method section in the info
-   --                 uri = true          --- wheather to show the uri section in the info
-   --             },
-   --         },
-   --     },
-   -- },
+    -- {
+    --     "adalessa/laravel.nvim",
+    --     dependencies = {
+    --         "nvim-telescope/telescope.nvim",
+    --         "tpope/vim-dotenv",
+    --         "MunifTanjim/nui.nvim",
+    --         "nvimtools/none-ls.nvim",
+    --     },
+    --     opts = {
+    --         features = {
+    --             null_ls = {
+    --                 enable = true,
+    --             },
+    --             route_info = {
+    --                 enable = true,      --- to enable the laravel.nvim virtual text
+    --                 position = 'right', --- where to show the info (available options 'right', 'top')
+    --                 middlewares = true, --- wheather to show the middlewares section in the info
+    --                 method = true,      --- wheather to show the method section in the info
+    --                 uri = true          --- wheather to show the uri section in the info
+    --             },
+    --         },
+    --     },
+    -- },
 
     -- AI Stuff - Avante
+    --
+    {
+        "github/copilot.vim",
+    },
     {
         "yetone/avante.nvim",
-        event = "VeryLazy", -- Equivalent to lazy loading on certain events
-        version = false,    -- Always pull the latest changes
-        --opts = {},    -- Add any options you want here
-        build = "make",     -- Build command for non-Windows
-        -- For Windows, you could use the following:
-        -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false",
+        event = "VeryLazy",
+        lazy = false,
+        version = false, -- set this if you want to always pull the latest change
+        opts = {
+            -- add any opts here
+        },
+        -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+        build = "make",
+        -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
         dependencies = {
-            -- Required dependencies
-            { "nvim-treesitter/nvim-treesitter" },
-            { "stevearc/dressing.nvim" },
-            { "nvim-lua/plenary.nvim" },
-            { "MunifTanjim/nui.nvim" },
-            { "nvim-tree/nvim-web-devicons" }, -- Optional
-            { "zbirenbaum/copilot.lua" },      -- Optional, for providers='copilot'
-
-            -- Dependency for image pasting support
+            "nvim-treesitter/nvim-treesitter",
+            "stevearc/dressing.nvim",
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+            --- The below dependencies are optional,
+            "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+            "zbirenbaum/copilot.lua", -- for providers='copilot'
             {
+                -- support for image pasting
                 "HakonHarnes/img-clip.nvim",
-                event = "VeryLazy", -- Lazy loading
-                config = function()
-                    require('img-clip').setup({
-                        default = {
-                            embed_image_as_base64 = false,
-                            prompt_for_file_name = false,
-                            drag_and_drop = {
-                                insert_mode = true,
-                            },
-                            use_absolute_path = true, -- Required for Windows users
+                event = "VeryLazy",
+                opts = {
+                    -- recommended settings
+                    default = {
+                        embed_image_as_base64 = false,
+                        prompt_for_file_name = false,
+                        drag_and_drop = {
+                            insert_mode = true,
                         },
-                    })
-                end,
+                        -- required for Windows users
+                        use_absolute_path = true,
+                    },
+                },
             },
-
-            -- Dependency for rendering markdown
             {
+                -- Make sure to set this up properly if you have lazy=true
                 'MeanderingProgrammer/render-markdown.nvim',
-                ft = { "markdown", "Avante" }, -- Lazy load based on file types
-                opts = function()
-                    require('render-markdown').setup({
-                        file_types = { "markdown", "Avante" }
-                    })
-                end,
+                opts = {
+                    file_types = { "markdown", "Avante" },
+                },
+                ft = { "markdown", "Avante" },
             },
         },
     },
+
 }

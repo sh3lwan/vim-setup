@@ -2,18 +2,45 @@
 
 -- Load and setup Avante with the required options
 local status, avante = pcall(require, 'avante')
-if true then
+if not status then
     return
 end
 
 avante.setup({
-    provider = "claude",                -- Recommend using Claude
-    auto_suggestions_provider = "claude", -- Use copilot for inexpensive auto-suggestions
-    claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        temperature = 0,
-        max_tokens = 4096,
+    provider = "copilot",                  -- Recommend using Claude
+    auto_suggestions_provider = "copilot", -- Use copilot for inexpensive auto-suggestions
+    vendors = {
+
+    --
+        claude = {
+            endpoint = "https://api.anthropic.com",
+            model = "claude-3-sonnet",
+            temperature = 0,
+            max_tokens = 4096,
+        },
+        ollama = {
+            ["local"] = true,
+            endpoint = "127.0.0.1:11434/v1",
+            model = "llama3.2",
+            parse_curl_args = function(opts, code_opts)
+                return {
+                    url = opts.endpoint .. "/chat/completions",
+                    headers = {
+                        ["Accept"] = "application/json",
+                        ["Content-Type"] = "application/json",
+                    },
+                    body = {
+                        model = opts.model,
+                        messages = require("avante.providers").copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
+                        max_tokens = 2048,
+                        stream = true,
+                    },
+                }
+            end,
+            parse_response_data = function(data_stream, event_state, opts)
+                require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+            end,
+        },
     },
     behaviour = {
         auto_suggestions = false, -- Experimental
@@ -55,11 +82,11 @@ avante.setup({
     },
     hints = { enabled = true },
     windows = {
-        position = "right", -- Sidebar position
-        wrap = true,    -- Enable wrap
-        width = 30,     -- Sidebar width
+        position = "right",   -- Sidebar position
+        wrap = true,          -- Enable wrap
+        width = 30,           -- Sidebar width
         sidebar_header = {
-            enabled = true, -- Enable/disable header
+            enabled = true,   -- Enable/disable header
             align = "center", -- Title alignment
             rounded = true,
         },
@@ -71,7 +98,7 @@ avante.setup({
             start_insert = true, -- Start in insert mode when editing
         },
         ask = {
-            floating = false, -- AvanteAsk prompt floating window
+            floating = false,    -- AvanteAsk prompt floating window
             start_insert = true, -- Insert mode on floating window open
             border = "rounded",
         },
