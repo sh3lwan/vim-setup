@@ -21,7 +21,8 @@ require("nvim-treesitter.configs").setup({
         "vue",
         "php",
         "templ",
-        "go"
+        "go",
+        "blade"
     },
     rainbow = {
         enable = true,

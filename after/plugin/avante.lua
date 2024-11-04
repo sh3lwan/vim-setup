@@ -7,8 +7,8 @@ if not status then
 end
 
 avante.setup({
-    provider = "copilot",                  -- Recommend using Claude
-    auto_suggestions_provider = "copilot", -- Use copilot for inexpensive auto-suggestions
+    provider = "claude",                  -- Recommend using Claude
+    auto_suggestions_provider = "claude", -- Use copilot for inexpensive auto-suggestions
     vendors = {
 
     --
