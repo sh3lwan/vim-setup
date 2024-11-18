@@ -13,8 +13,10 @@ telescope.setup {
             ".templ.go"
         },
         layout_config = {
-            preview_cutoff = 100,
+            ---preview_cutoff = 100,
+            preview_width = 0.6, -- Adjust this value to increase the preview width
         },
+        --layout_strategy = 'horizontal',
     },
     path_display = {
         "filename_first",
