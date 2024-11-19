@@ -1,14 +1,14 @@
 return {
     -- Fuzzy Finding
-    {
-        'nvim-telescope/telescope.nvim',
-        tag = '0.1.8',
-        dependencies = {
-            --'nvim-lua/popup.nvim', -- creating an issue with telescope
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope-fzf-native.nvim'
-        }
-    },
+   -- {
+   --     'nvim-telescope/telescope.nvim',
+   --     tag = '0.1.8',
+   --     dependencies = {
+   --         --'nvim-lua/popup.nvim', -- creating an issue with telescope
+   --         'nvim-lua/plenary.nvim',
+   --         'nvim-telescope/telescope-fzf-native.nvim'
+   --     }
+   -- },
 
     -- Color Scehem
     { "catppuccin/nvim", as = "catppuccin" },
