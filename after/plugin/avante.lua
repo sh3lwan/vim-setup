@@ -5,8 +5,67 @@ local status, avante = pcall(require, 'avante')
 if not status then
     return
 end
+-- Function to get project-specific history file path
+local function get_history_file_path()
+    local project_root = vim.fn.getcwd()
+    local project_name = vim.fn.fnamemodify(project_root, ':t')
+    local history_dir = vim.fn.stdpath("data") .. "/avante_history"
+    -- Create history directory if it doesn't exist
+    vim.fn.mkdir(history_dir, "p")
+    return history_dir .. "/" .. project_name .. "_history.md"
+end
+
+-- Function to save history to .md file with timestamp
+local function save_to_md_file(question, answer)
+  local history_file_path = get_history_file_path()
+  local file = io.open(history_file_path, "a") -- Open in append mode
+  if file then
+      local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+      file:write("## " .. timestamp .. "\n\n")
+      file:write("### Question\n")
+      file:write(question .. "\n\n")
+      file:write("### Answer\n")
+      file:write(answer .. "\n\n")
+      file:write("---\n\n")
+      file:close()
+  else
+      vim.notify("Error: Unable to write to history file: " .. history_file_path, vim.log.levels.ERROR)
+  end
+end
+  
+  -- Function to load and display history
+local function load_history()
+  local history_file_path = get_history_file_path()
+  local file = io.open(history_file_path, "r")
+  if file then
+      local content = file:read("*all")
+      file:close()
+      -- Create a new buffer for history
+      vim.cmd('new')
+      vim.cmd('setlocal buftype=nofile')
+      vim.cmd('setlocal bufhidden=hide')
+      vim.cmd('setlocal noswapfile')
+      vim.api.nvim_buf_set_name(0, 'Avante History')
+      -- Set buffer content
+      local lines = vim.split(content, '\n')
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+      -- Set buffer options
+      vim.cmd('setlocal readonly')
+      vim.cmd('setlocal filetype=markdown')
+  else
+      vim.notify("No history file found for current project", vim.log.levels.INFO)
+  end
+end
+
+-- Create vim command to view history
+vim.api.nvim_create_user_command('AvanteHistory', load_history, {})
 
 avante.setup({
+    on_result = function(question, answer)
+            vim.notify("Question: " .. question, vim.log.levels.INFO)
+            vim.notify("Answer: " .. answer, vim.log.levels.INFO)
+            save_to_md_file(question, answer)
+    end,
     provider = "claude",                  -- Recommend using Claude
     auto_suggestions_provider = "claude", -- Use copilot for inexpensive auto-suggestions
     vendors = {

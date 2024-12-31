@@ -68,6 +68,7 @@ return {
     -- Git related plugins
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
+    'rhysd/conflict-marker.vim',
     {
         'nvim-lualine/lualine.nvim',
         dependencies = {

@@ -48,8 +48,9 @@ lsp.on_attach(function(_, bufnr)
     vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
     vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
 
+    -- pause autoformat for now
     vim.keymap.set("n", "<leader><leader>", function()
-        vim.lsp.buf.format()
+        --vim.lsp.buf.format()
     end, opts)
 
     vim.keymap.set("n", '<leader>e', function()
