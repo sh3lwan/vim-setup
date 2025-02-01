@@ -80,6 +80,3 @@
 ## Installation
 Make sure to have `Lazy.nvim` installed. Place the above Neovim configuration in your `init.lua` or `lazy.lua` file and reload Neovim.
 
-## Download
-[Click here to download](./README.md)
-
