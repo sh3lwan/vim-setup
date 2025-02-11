@@ -4,6 +4,21 @@ if not status then
     return
 end
 
+-- Function to toggle Copilot
+local function toggle_copilot()
+    local enabled = require("copilot.client").is_disabled()
+    if enabled then
+        vim.cmd("Copilot enable")
+        vim.notify("Copilot enabled", vim.log.levels.INFO)
+    else
+        vim.cmd("Copilot disable")
+        vim.notify("Copilot disabled", vim.log.levels.INFO)
+    end
+end
+
+-- Add keybinding for toggle
+vim.keymap.set("n", "<leader>cp", toggle_copilot, { noremap = true, silent = true, desc = "Toggle Copilot" })
+
 require('copilot').setup({
     panel = {
         enabled = true,

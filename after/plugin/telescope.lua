@@ -31,8 +31,9 @@ telescope.setup {
             ".templ.go"
         },
         layout_config = {
-           prompt_position = "top",
+           --prompt_position = "top",
            --mirror = true,
+           --preview_width = 0.5,
            --preview_cutoff = 100,
            --preview_height = 0.8,
         }
@@ -55,6 +56,7 @@ telescope.setup {
     sorting_strategy = "ascending",
     pickers = {
         find_files = {
+            hidden = true,
             initial_mode = "insert",
             --hidden = true,
             previewer = true,
@@ -92,7 +94,7 @@ telescope.setup {
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+--vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Telescope resume search' })
 vim.keymap.set('n', '<leader>fm', function()
   builtin.treesitter {
@@ -121,7 +123,7 @@ end
 
 
 if builtin.git_branches then
-    vim.keymap.set('n', '<leader>fB', builtin.git_branches, { desc = 'Telescope git branches' })
+    vim.keymap.set('n', '<leader>fb', builtin.git_branches, { desc = 'Telescope git branches' })
 else
     print("git_branches is not available in telescope.builtin")
 end
