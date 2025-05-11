@@ -125,9 +125,9 @@ return {
 
     -- AI Stuff - Avante
     --
-    {
-        "github/copilot.vim",
-    },
+    -- {
+    --"github/copilot.vim",
+    --},
     {
         "yetone/avante.nvim",
         event = "VeryLazy",
