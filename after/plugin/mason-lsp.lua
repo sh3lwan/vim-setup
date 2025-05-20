@@ -5,20 +5,20 @@ if not status then
 end
 
 masonlsp.setup({
-    ['pest_ls'] = function ()
+    ['pest_ls'] = function()
         require('pest-vim').setup {}
     end,
     automatic_installation = true,
     ensure_installed = {
         "phpactor",
         "intelephense",
-        "sqlls",
-        "volar",
-        "dockerls",
-        "cssls",
-        "eslint",
-        "html",
-        "jsonls",
+        -- "sqlls",
+        -- "volar",
+        -- "dockerls",
+        -- "cssls",
+        --"eslint",
+        --"html",
+        --"jsonls",
         "tailwindcss",
         "templ",
         "lua_ls",
