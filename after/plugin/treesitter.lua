@@ -15,6 +15,7 @@ require("nvim-treesitter.configs").setup({
         "css",
         "markdown",
         "json",
+        "dart",
         "yaml",
         "rust",
         "lua",

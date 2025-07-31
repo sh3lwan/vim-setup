@@ -121,13 +121,20 @@ return {
         "folke/todo-comments.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
     },
-
+    {
+        "sainnhe/gruvbox-material",
+        enabled = true,
+        priority = 1000,
+        config = function()
+            vim.cmd.colorscheme("gruvbox-material")
+        end,
+    },
 
     -- AI Stuff - Avante
     --
-    -- {
-    --"github/copilot.vim",
-    --},
+    {
+        "github/copilot.vim",
+    },
     -- {
     --     "yetone/avante.nvim",
     --     event = "VeryLazy",
@@ -174,5 +181,6 @@ return {
     --         },
     --     },
     -- },
+    --
 
 }

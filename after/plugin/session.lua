@@ -1,95 +1,77 @@
+-- Helper to refresh the current buffer (and re-trigger highlighting/colors)
 local function refreshBuffer()
-    -- Refresh the current file with :e!
     vim.defer_fn(function()
-        local status, err = pcall(function() vim.cmd('e!') end)
+        local bufname = vim.api.nvim_buf_get_name(0)
 
-        if err or not status then
-            -- Get the current working directory
-            local cwd = vim.loop.cwd()
-
-            status, _ = pcall(require, 'oil')
-
-            if not status then
-                print("Failed to load 'oil'. Please ensure it is installed.")
-                return
-            end
-
-            require('oil').open(cwd)
+        if bufname ~= '' and vim.bo.modifiable and vim.fn.filereadable(bufname) == 1 then
+            -- Safe refresh: recheck file and force redraw
+            vim.cmd('checktime')
+            vim.cmd('silent! edit!')
         end
     end, 50)
 end
 
--- Function to load a project-specific session
+-- Helper to build a session filename from the last 2 directory parts
+local function get_session_filename()
+    local parts = vim.fn.split(vim.fn.getcwd(), '/')
+    if #parts < 2 then return nil end
+    return parts[#parts - 1] .. '-' .. parts[#parts] .. '-session'
+end
+
+-- Load a project-specific session
 function load_project_session()
-    -- Get the current project directory
-    local current_directory = vim.fn.getcwd()
-
-    -- Split the current directory path into parts based on the directory separator ("/" or "\")
-    local parts = vim.fn.split(current_directory, '/')
-
-    if #parts < 2 then
+    local session_name = get_session_filename()
+    if not session_name then
         print("Path is too short, cannot construct session name.")
         return
     end
 
-    -- Get the last two parts of the directory
-    local last_two_parts = parts[#parts - 1] .. '-' .. parts[#parts] .. '-session'
+    local sessions_directory = vim.fn.stdpath('config') .. '/.sessions/'
 
-    -- If a project directory is found, construct the session file path
-    if last_two_parts ~= '' then
-
-        local sessions_directory = vim.fn.stdpath('config') .. '/.sessions/'
-
-        -- if sessions directory is not found -> create
-        if vim.fn.isdirectory(sessions_directory) == 0 then
-            vim.fn.mkdir(sessions_directory, "p")
-        end
-
-        local session_file = sessions_directory .. last_two_parts .. '.vim'
-
-        -- Check if the session file exists and load it
-        if vim.fn.filereadable(session_file) == 1 then
-            local status, err = pcall(function()
-                vim.cmd('source ' .. session_file)
-                refreshBuffer()
-            end)
-
-            if not status then
-                print("Error loading session: " .. err)
-            end
-        else
-            print("No Session Found.")
-        end
+    if vim.fn.isdirectory(sessions_directory) == 0 then
+        vim.fn.mkdir(sessions_directory, "p")
     end
-end
 
--- Function to save a project-specific session
-function save_project_session()
-    -- Get the current project directory
-    local current_directory = vim.fn.getcwd()
+    local session_file = sessions_directory .. session_name .. '.nvim'
 
-    -- Split the current directory path into parts based on the directory separator ("/" or "\")
-    local parts = vim.fn.split(current_directory, '/')
-
-    -- Get the last two parts of the directory
-    local last_two_parts = parts[#parts - 1] .. '-' .. parts[#parts] .. '-session'
-
-    if last_two_parts ~= '' then
-        local sessions_directory = vim.fn.stdpath('config') .. '/.sessions/'
-        local session_file = sessions_directory .. last_two_parts .. '.vim'
-        -- Save the session to ~/.config/nvim/.sessions/{session}.vim
-        vim.cmd('mksession! ' .. session_file)
+    if vim.fn.filereadable(session_file) == 1 then
+        local ok, err = pcall(function()
+            vim.cmd('source ' .. vim.fn.fnameescape(session_file))
+            refreshBuffer()
+        end)
+        if not ok then
+            print("Error loading session: " .. err)
+        end
     else
-        print("Project not detected. Session not saved.")
+        print("No Session Found.")
     end
 end
 
---Automatically load the project-specific session on startup
+-- Save a project-specific session
+function save_project_session()
+    local session_name = get_session_filename()
+    if not session_name then
+        print("Project not detected. Session not saved.")
+        return
+    end
+
+    local sessions_directory = vim.fn.stdpath('config') .. '/.sessions/'
+
+    if vim.fn.isdirectory(sessions_directory) == 0 then
+        vim.fn.mkdir(sessions_directory, "p")
+    end
+
+    local session_file = sessions_directory .. session_name .. '.nvim'
+    vim.cmd('mksession! ' .. vim.fn.fnameescape(session_file))
+end
+
+-- Auto-load session only if no files were passed (e.g. plain `nvim`)
 vim.cmd([[
-    autocmd VimEnter * lua load_project_session()
+  autocmd VimEnter * lua if vim.fn.argc() == 0 then load_project_session() end
 ]])
 
--- Automatically save the project-specific session when quitting Neovim
+-- Auto-save the session on exit
 vim.cmd([[
   autocmd VimLeave * lua save_project_session()
 ]])
+
