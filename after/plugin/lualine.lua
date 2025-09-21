@@ -87,7 +87,7 @@ require('lualine').setup {
         lualine_a = { 'mode' },
         lualine_b = { 'branch', 'fancy_diff' },
         lualine_c = {
-            --{ "fancy_cwd", substitute_home = true },
+            { "fancy_cwd", substitute_home = true },
             {
                 "filename",
                 path = 1, -- 2 for full path

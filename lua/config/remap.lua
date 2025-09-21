@@ -16,6 +16,20 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 
 map("n", "<leader>pv", "<CMD>Oil<CR>")
 
+map("n", "<leader>cp", function()
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+  print('📋 File path copied to clipboard!')
+end)
+
+--vim.keymap.set('n', '<leader>cp', function()
+--  vim.fn.setreg('+', vim.fn.expand('%:p'))
+--  print('📋 File path copied to clipboard!')
+--end, { desc = 'Copy file path to clipboard' })
+
+--vim.keymap.set('n', '<leader>cp', function()
+--  vim.fn.setreg('+', vim.fn.expand('%:p'))
+--  print('📋 File path copied to clipboard!')
+--end, { desc = 'Copy file path to clipboard' })
 --map("n", "<C-d>", "<C-d>zz")
 --map("n", "<C-u>", "<C-u>zz")
 --vim.opt.scrolloff = 8 -- or any value larger than 0

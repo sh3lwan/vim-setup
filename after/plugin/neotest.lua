@@ -1,13 +1,6 @@
 local status, neotest = pcall(require, 'neotest')
 require("neotest").setup({
     adapters = {
-        require("neotest-phpunit")({
-            -- Optional: path to your phpunit binary or config
-            phpunit_cmd = "vendor/bin/pest", -- or "vendor/bin/phpunit"
-            cwd = function()
-                return vim.fn.getcwd()
-            end,
-        }),
         require('neotest-pest'),
     },
     quickfix = {

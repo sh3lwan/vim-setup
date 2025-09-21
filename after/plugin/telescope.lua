@@ -1,145 +1,171 @@
-local status, telescope = pcall(require, 'telescope')
+local ok, telescope = pcall(require, "telescope")
+if not ok then return end
 
-if not status then
-    return
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+local builtin = require("telescope.builtin")
+
+-- Helpers
+local function in_git_repo()
+    return vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null"):find("true") ~= nil
 end
 
-local action_state = require('telescope.actions.state')
+local function project_files()
+    if in_git_repo() then
+        builtin.git_files({ show_untracked = true })
+    else
+        builtin.find_files()
+    end
+end
 
-local function filter_conflict_files(prompt_bufnr)
+-- Conflicts-only picker (fast + robust)
+local function git_conflicts_picker()
+    local cmd = { "bash", "-lc", "git diff --name-only --diff-filter=U" }
+    builtin.find_files({
+        prompt_title = "Git Conflicts",
+        find_command = cmd, -- feed file list via stdin? Simpler: use `fd` fallback
+    })
+end
+
+-- Or: filter inside git_status by entry.status
+local function filter_conflict_files_in_status(prompt_bufnr)
     local picker = action_state.get_current_picker(prompt_bufnr)
-    local entries = {}
+    local filtered = {}
 
-    -- Iterate over entries in the manager
     for entry in picker.manager:iter() do
-        if entry.value:match("UU") then -- Filter files with conflicts ('UU' indicates conflict)
-            table.insert(entries, entry)
+        -- entry.value.status exists in git_status; 'UU', 'AA', 'DD', etc.
+        local st = (entry.value.status or entry.status or "")
+        if st:find("U") then
+            table.insert(filtered, entry)
         end
     end
-
-    -- Refresh picker with filtered entries
     picker:reset_selection()
-    picker:refresh(function() return entries end, { reset_prompt = true })
+    picker:refresh(function() return filtered end, { reset_prompt = true })
 end
 
-telescope.setup {
+telescope.setup({
     defaults = {
+        vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            "--hidden",
+            "--glob", "!.git/",
+        },
         file_ignore_patterns = {
-            "node_modules",
-            "vendor",
-            ".git",
-            ".templ.go"
+            "node_modules", "vendor", "%.lock", "%.cache", "%.min%.js",
+            ".git/", ".next/", "dist/", "build/", "%.templ%.go",
         },
+        sorting_strategy = "ascending",
         layout_config = {
-           --prompt_position = "top",
-           --mirror = true,
-           --preview_width = 0.5,
-           --preview_cutoff = 100,
-           --preview_height = 0.8,
-        }
-        --layout_config = {
-            --preview_cutoff = 100,
-            --     preview_width = 0.6, -- Adjust this value to increase the preview width
-        --},
-    },
-    path_display = {
-        "filename_first",
-    },
-    mappings = {
-        n = {
-            ["d"] = "delete_buffer",
+            prompt_position = "top",
+            -- flex layout auto-switches column/row, nice defaults:
+            -- width/height scale well without hand-tuning
         },
-        i = {
-            ["<c-d>"] = "delete_buffer",
-        }
-    },
-    sorting_strategy = "ascending",
-    pickers = {
-        find_files = {
-            hidden = true,
-            initial_mode = "insert",
-            --hidden = true,
-            previewer = true,
-            theme = "dropdown",
-        },
-        buffers = {
-            initial_mode = "normal",
-            show_all_buffers = true,
-            sort_lastused = true,
-            theme = "dropdown",
-            previewer = true,
-            mappings = {
-                n = {
-                    ["d"] = "delete_buffer",
-                },
-                i = {
-                    ["<c-d>"] = "delete_buffer",
-                }
+        path_display = { "filename_first", "truncate" }, -- short & readable
+        mappings = {
+            i = {
+                ["<C-k>"] = actions.move_selection_previous,
+                ["<C-j>"] = actions.move_selection_next,
+                ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+                ["<C-d>"] = actions.delete_buffer,
+                -- ["<Esc>"] = actions.close,
+            },
+            n = {
+                ["q"]     = actions.close,
+                ["d"]     = actions.delete_buffer,
+                ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+                --["Esc"]  = function () return false end,
             },
         },
-       -- git_status = {
-       --     initial_mode = "normal",
-       --     mappings = {
-       --        -- i = {
-       --        --     ["<C-s>"] = filter_conflict_files,
-       --        -- },
-       --        -- n = {
-       --        --     ["<C-s>"] = filter_conflict_files,
-       --        -- }
-       --     }
-       -- }
-    }
-}
+        dynamic_preview_title = true,
+        -- preview = { filesize_limit = 1 }, -- uncomment if big files stall preview
+    },
 
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
---vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = 'Telescope resume search' })
-vim.keymap.set('n', '<leader>fm', function()
-  builtin.treesitter {
-    prompt_title = "Search Functions",
-    symbols = { 'function', 'method' } -- Search functions and methods
-  }
-end, { desc = "Find Functions using Telescope" })
+    pickers = {
+        find_files = {
+            theme = "dropdown",
+            previewer = true,
+            initial_mode = "insert",
+            hidden = true,
+            find_command = { "fd", "--type", "f", "--hidden", "--follow", "--exclude", ".git" },
+        },
+        buffers = {
+            theme = "dropdown",
+            previewer = true,
+            initial_mode = "normal",
+            sort_lastused = true,
+            mappings = {
+                i = { ["<C-d>"] = actions.delete_buffer },
+                n = { ["d"] = actions.delete_buffer },
+            },
+        },
+        git_status = {
+            initial_mode = "normal",
+            mappings = {
+                n = {
+                    ["<C-s>"] = filter_conflict_files_in_status,
+                },
+                i = {
+                    ["<C-s>"] = filter_conflict_files_in_status,
+                },
+            },
+        },
+    },
 
-if builtin.file_history then
-    vim.keymap.set('n', '<leader>fh', builtin.file_history, { desc = 'Telescope file history' })
-else
-    print("file_history is not available in telescope.builtin")
-end
+    extensions = {
+        fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+        },
+        ["live_grep_args"] = {
+            auto_quoting = true, -- makes adding -F/-w/etc easier
+            mappings = {
+                i = {
+                    ["<C-f>"] = require("telescope-live-grep-args.actions").quote_prompt(),                    -- literal
+                    ["<C-w>"] = require("telescope-live-grep-args.actions").quote_prompt({ postfix = " -w" }), -- whole word
+                },
+            },
+        },
+        ["ui-select"] = { require("telescope.themes").get_dropdown({}) },
+    },
+})
 
-if builtin.git_status then
-    vim.keymap.set('n', '<leader>fs', builtin.git_status, { desc = 'Telescope git status' })
-else
-    print("git_status is not available in telescope.builtin")
-end
+-- Load extensions
+pcall(telescope.load_extension, "fzf")
+pcall(telescope.load_extension, "live_grep_args")
+pcall(telescope.load_extension, "ui-select")
 
-if builtin.git_commits then
-    vim.keymap.set('n', '<leader>fc', builtin.git_commits, { desc = 'Telescope git commits' })
-else
-    print("git_commits is not available in telescope.builtin")
-end
+-- Keymaps
+vim.keymap.set("n", "<leader>ff", project_files, { desc = "Find files (smart git)" })
+vim.keymap.set("n", "<leader>fF", builtin.find_files, { desc = "Find files (all)" })
+vim.keymap.set("n", "<leader>fg", telescope.extensions.live_grep_args.live_grep_args, { desc = "Live grep (args)" })
+vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Resume" })
+vim.keymap.set("n", "<leader>fs", builtin.git_status, { desc = "Git status" })
+vim.keymap.set("n", "<leader>fc", builtin.git_commits, { desc = "Git commits" })
+vim.keymap.set("n", "<leader>fb", builtin.git_branches, { desc = "Git branches" })
 
+-- Grep word under cursor (regex-capable)
+vim.keymap.set("n", "<leader>FG", function()
+    builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
+end, { desc = "Grep <cword>" })
 
-if builtin.git_branches then
-    vim.keymap.set('n', '<leader>fb', builtin.git_branches, { desc = 'Telescope git branches' })
-else
-    print("git_branches is not available in telescope.builtin")
-end
+-- Grep visual selection (regex-capable)
+vim.keymap.set("v", "<leader>FG", function()
+    local text = vim.fn.escape(vim.fn.getreg('v'), "\\/.*$^~[]") -- conservative escape for safety
+    builtin.live_grep({ default_text = text })
+end, { desc = "Grep selection" })
 
+-- Find files with <cword> prefilled
+vim.keymap.set("n", "<leader>FF", function()
+    builtin.find_files({ default_text = vim.fn.expand("<cword>") })
+end, { desc = "Find files with <cword>" })
 
--- Safely expand <cword> and handle potential nil/false values
-vim.api.nvim_set_keymap('n', '<leader>FG',
-    [[:lua vim.cmd("Telescope live_grep default_text=" .. (vim.fn.expand("<cword>") or "") .. "")<CR>]],
-    { noremap = true, silent = true }
-)
-
-vim.api.nvim_set_keymap('v', '<leader>FG',
-    [[:<C-U>lua local text = vim.fn.escape(vim.fn.getreg('\"'), ' '); vim.cmd('Telescope live_grep default_text=' .. text)<CR>]],
-    { noremap = true, silent = true }
-)
-
-vim.api.nvim_set_keymap('n', '<leader>FF',
-    [[:lua vim.cmd("Telescope find_files default_text=" .. (vim.fn.expand("<cword>") or "") .. "")<CR>]],
-    { noremap = true, silent = true })
+-- Conflicts fast pick
+vim.keymap.set("n", "<leader>fU", git_conflicts_picker, { desc = "Git conflicts" })
