@@ -46,17 +46,17 @@ return {
     -- Linter - For errors and bugs detections
     'mfussenegger/nvim-lint',
 
-    {
-        "nvim-neotest/neotest",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-            "nvim-neotest/nvim-nio",
-            "antoinemadec/FixCursorHold.nvim",
-            "nvim-neotest/neotest-go",
-            "olimorris/neotest-phpunit",
-            "V13Axel/neotest-pest",
-        },
-    },
+    -- {
+    --     "nvim-neotest/neotest",
+    --     dependencies = {
+    --         "nvim-treesitter/nvim-treesitter",
+    --         "nvim-neotest/nvim-nio",
+    --         "antoinemadec/FixCursorHold.nvim",
+    --         "nvim-neotest/neotest-go",
+    --         "olimorris/neotest-phpunit",
+    --         "V13Axel/neotest-pest",
+    --     },
+    -- },
 
     -- Terminal
     -- {
